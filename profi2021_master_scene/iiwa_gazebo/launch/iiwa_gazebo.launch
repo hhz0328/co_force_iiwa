@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- ===================================================================================== -->
+    <!-- |    Lauch file to start Gazebo with an IIWA using various controllers.	           | -->
+
+    <!-- |    It allows to customize the name of the robot, for each robot                   | -->
+    <!-- |	  its topics will be under a nameespace with the same name as the robot's.       | -->
+    <!-- ===================================================================================== -->
+
+    <arg name="hardware_interface" default="EffortJointInterface" />
+    <arg name="robot_name" default="iiwa" />
+    <arg name="model" default="iiwa14"/>
+    <arg name="gui" default="false"/>
+
+    <include file="$(find iiwa_gazebo)/launch/iiwa_world.launch">
+        <arg name="hardware_interface" value="$(arg hardware_interface)" />
+        <arg name="robot_name" value="$(arg robot_name)" />
+        <arg name="model" value="$(arg model)" />
+        <arg name="gui" value="$(arg gui)" />
+    </include>
+
+    <!-- Load controllers -->
+
+    <group ns="$(arg robot_name)">
+
+        <include file="$(find iiwa_control)/launch/iiwa_control.launch">
+            <arg name="hardware_interface" value="$(arg hardware_interface)" />
+            <arg name="controllers" value="joint1_torque_controller
+                 joint2_torque_controller
+                 joint3_torque_controller
+                 joint4_torque_controller
+                 joint5_torque_controller
+                 joint6_torque_controller
+                 joint7_torque_controller
+                 joint1_position_controller
+                 joint2_position_controller
+                 joint3_position_controller
+                 joint4_position_controller
+                 joint5_position_controller
+                 joint6_position_controller
+                 joint7_position_controller"/>
+            <arg name="robot_name" value="$(arg robot_name)" />
+            <arg name="model" value="$(arg model)" />
+        </include>
+
+    </group>
+
+    <!-- convert joint states to TF transforms for rviz, etc -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+      respawn="false" output="screen">
+      <remap from="/joint_states" to="/iiwa/joint_states" />
+    </node>
+
+    <!-- Launch rviz -->
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find iiwa_gazebo)/config/iiwa_config.rviz" />
+
+
+</launch>

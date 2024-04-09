@@ -1,0 +1,65 @@
+#iiwa:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 200
+
+  # Уаащке сontrollers for singular joint ------------------------------------
+  joint1_torque_controller:
+    type: effort_controllers/JointEffortController
+    joint: iiwa_joint_1
+    pid: {p: 800, i: 0.5, d: 10}
+  joint2_torque_controller:
+    type: effort_controllers/JointEffortController
+    joint: iiwa_joint_2
+    pid: {p: 1000, i: 0.5, d: 10}
+  joint3_torque_controller:
+    type: effort_controllers/JointEffortController
+    joint: iiwa_joint_3
+    pid: {p: 800, i: 0.5, d: 10}
+  joint4_torque_controller:
+    type: effort_controllers/JointEffortController
+    joint: iiwa_joint_4
+    pid: {p: 300, i: 0.1, d: 5}
+  joint5_torque_controller:
+    type: effort_controllers/JointEffortController
+    joint: iiwa_joint_5
+    pid: {p: 300, i: 0.1, d: 5}
+  joint6_torque_controller:
+    type: effort_controllers/JointEffortController
+    joint: iiwa_joint_6
+    pid: {p: 300, i: 0.1, d: 5}
+  joint7_torque_controller:
+    type: effort_controllers/JointEffortController
+    joint: iiwa_joint_7
+    pid: {p: 300, i: 0.1, d: 5}
+
+  # Position Controllers ---------------------------------------
+  joint1_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: iiwa_joint_1
+    pid: {p: 200, i: 0.5, d: 10}
+  joint2_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: iiwa_joint_2
+    pid: {p: 300, i: 0.5, d: 10}
+  joint3_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: iiwa_joint_3
+    pid: {p: 300, i: 0.5, d: 10}
+  joint4_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: iiwa_joint_4
+    pid: {p: 100, i: 0.1, d: 5}
+  joint5_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: iiwa_joint_5
+    pid: {p: 50, i: 0.04, d: 2}
+  joint6_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: iiwa_joint_6
+    pid: {p: 50, i: 0.05, d: 2}
+  joint7_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: iiwa_joint_7
+    pid: {p: 50, i: 0.04, d: 2}

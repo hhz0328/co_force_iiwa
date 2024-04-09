@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -O3 -DNDEBUG  -shared -Wl,-soname,libgmock.so -o ../lib/libgmock.so CMakeFiles/gmock.dir/src/gmock-all.cc.o  -Wl,-rpath,/home/hhz/co_force_iiWA/src/profi2021_master_scene/orocos_kinematics_dynamics/orocos_kdl/build/gtest/lib ../lib/libgtest.so -lpthread 

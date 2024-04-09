@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>iiwa_description</name>
+  <version>1.4.0</version>
+  <description>This package contains the URDF </description>
+  <maintainer email="some@some.com">Some Some</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>force_torque_sensor_controller</depend>
+
+</package>

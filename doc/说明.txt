@@ -1,0 +1,15 @@
+###版本一###
+
+https://gitlab.com/beerlab/iprofi2021/profi2021_master_scene    //机器人克隆场景，这个我没跑通，所以src目录下直接删了
+https://github.com/kirillin/force_control    //力控制器
+
+编译：
+catkin build
+
+
+修改：
+把/home/hhz/co_force_iiWA/src/profi2021_master_scene/orocos_kinematics_dynamics文件夹下面的python_orocos_kdl删除了（/home/hhz/备份 中有整个软件包的原件备份）
+
+
+
+

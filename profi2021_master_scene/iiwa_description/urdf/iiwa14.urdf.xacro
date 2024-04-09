@@ -1,0 +1,210 @@
+<?xml version="1.0"?>
+<robot name="iiwa14" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find iiwa_description)/urdf/materials.xacro" />
+  <!--Import the lbr iiwa macro -->
+  <xacro:include filename="$(find iiwa_description)/urdf/iiwa14.xacro"/>
+
+  <xacro:arg name="hardware_interface" default="EffortJointInterface"/>
+  <xacro:arg name="robot_name" default="iiwa"/>
+  <xacro:arg name="origin_xyz" default="0 0 0"/>
+  <xacro:arg name="origin_rpy" default="0 0 0"/>
+
+
+
+  <!-- Add table with plate -->
+  <xacro:property name="table_height" value="0.6077" />
+  <xacro:property name="table_length" value="1.19" />
+
+  <!-- Fix to world -->
+  <link name="world"/>
+
+  <joint name="table_joint" type="fixed">
+    <parent link="world" />
+    <child link = "table_link" />
+    <origin xyz="0 0 0" rpy="0 0 ${PI}" />
+  </joint>
+
+  <!-- Here we define the geometry of the table -->
+  <link name="table_link">
+    <visual>
+      <geometry>
+        <mesh filename="file://$(find iiwa_description)/meshes/table/visual/complete_table.dae"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+    <collision>
+      <origin xyz="${-table_length/2} ${-table_length/2} ${table_height/2}" rpy="0 0 0" />
+      <geometry>
+        <box size="${table_length} ${table_length} ${table_height}"/>
+      </geometry>
+      <material name="gray"/>
+    </collision>
+    <inertial>
+      <mass value="50"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+
+
+
+
+    <!--iiwa-->
+  <xacro:iiwa14 hardware_interface="$(arg hardware_interface)" robot_name="$(arg robot_name)" parent="table_link">
+    <origin xyz="$(arg origin_xyz)" rpy="$(arg origin_rpy)" />
+  </xacro:iiwa14>
+
+  <property name="tool_mass" value="0.200" />
+  <property name="tool_joint_offset" value="0.00 0.00 0.00" />
+  <property name="tool_link_offset" value="0.00 0.00 0.08" />
+
+  <!--  Here we define a dummy joint between the tip of the iiwa14 and the base of the tool.
+  There is no offset between the two, that means the tool is attached at the robot flange. -->
+  <joint name="tool_dump_joint" type="fixed">
+    <parent link="iiwa_link_ee" />
+    <child link = "tool_dump_link" />
+    <origin xyz="0.00 0.00 0.00" rpy="0 0 0" />
+  </joint>
+
+  <link name="tool_dump_link">
+    <visual>
+      <origin xyz="0 0 0.03" rpy="0 0 0"/>
+      <geometry>
+  	   <cylinder length="0.06" radius="0.02"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.3"/>
+      <inertia ixx="0.001"  ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+    </inertial>
+  </link>
+
+  <joint name="tool_joint" type="fixed">
+    <parent link="iiwa_link_ee" />
+    <child link = "tool_link" />
+    <origin xyz="0.00 0.00 0.00" rpy="0 0 0" />
+  </joint>
+
+  <link name="tool_link">
+    <visual>
+      <origin xyz="0 0 0.06" rpy="0 0 0"/>
+      <geometry>
+  <!-- <mesh filename="package://iiwa_description/meshes/tool/visual/tool.stl"/> -->
+  	   <sphere radius="0.02"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.06" rpy="0 0 0"/>
+      <geometry>
+  <!-- <mesh filename="package://iiwa_description/meshes/tool/visual/tool.stl"/> -->
+  	   <sphere radius="0.02"/>
+      </geometry>
+      <material name="Grey"/>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.3"/>
+      <inertia ixx="0.001"  ixy="0"  ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+    </inertial>
+  </link>
+  <!--  Here we define another dummy joint. It is placed at the end of the tool, so we can then attach a frame at its TCP for control -->
+  <joint name="tool_tip_joint" type="fixed">
+    <parent link="tool_link" />
+    <child link = "tool_link_ee" />
+    <origin xyz="0.00 0.00 0.08" rpy="0 ${-PI/2.0} 0" />
+  </joint>
+
+  <!--  The TCP frame is here defined -->
+  <link name="tool_link_ee"/>
+
+
+  <!-- Here we do the same as before, the resulting frame will be in the same position of the last one,
+  but we add a rotation to be aligned with the convention used by KUKA. So this fame will have exactly the same representation of the frame
+  attached to this tool as defined in Sunrise Workbench! This is really useful when directly controlling the robot without MoveIt! -->
+
+  <joint name="tool_tip_joint_kuka" type="fixed">
+    <parent link="tool_link" />
+    <child link = "tool_link_ee_kuka" />
+    <origin xyz="0.00 0.00 0.08" rpy="0 0 0" />
+  </joint>
+
+  <link name="tool_link_ee_kuka"/>
+
+
+  <joint name="camera_mount_joint" type="fixed">
+    <parent link="tool_link" />
+    <child link = "camera_link" />
+    <origin xyz="-0.06 0 0" rpy="0 0 0" />
+  </joint>
+
+  <link name="camera_link">
+    <visual>
+      <origin xyz="-0.0112 -0.0102 -0.0125" rpy="${PI/2} 0 ${PI/2}"/>
+      <geometry>
+        <mesh filename="file://$(find iiwa_description)/meshes/camera/visual/realsense.stl"/>
+      </geometry>
+      <material name="Silver"/>
+    </visual>
+  </link>
+
+  <joint name="camera_optical_joint" type="fixed">
+    <!-- these values have to be these values otherwise the gazebo camera
+        image won't be aligned properly with the frame it is supposedly
+        originating from -->
+    <origin xyz="0 0 0" rpy="0 ${-PI/2} 0"/>
+    <parent link="camera_link"/>
+    <child link="camera_link_optical"/>
+  </joint>
+
+  <link name="camera_link_optical">
+  </link>
+
+
+
+
+  <joint name="surface_joint" type="fixed">
+    <parent link="iiwa_link_0" />
+    <child link = "surface_link" />
+    <origin xyz="0.35 ${-0.75/2} 0.06" rpy="0 0 0" />
+  </joint>
+
+  <joint name="contour_surface_joint" type="fixed">
+    <parent link="iiwa_link_0" />
+    <child link = "contour_surface_link" />
+    <origin xyz="0.35 ${-0.75/2} 0.064" rpy="0 0 0" />
+  </joint>
+
+<!-- Here we define the geometry of the surface -->
+  <link name="surface_link">
+    <visual>
+      <geometry>
+        <mesh filename="file://$(find iiwa_description)/meshes/surface/collision/surface.stl"/>
+      </geometry>
+      <material name="White"/>
+    </visual>
+    <collision>
+      <geometry>
+       <mesh filename="file://$(find iiwa_description)/meshes/surface/collision/surface.stl"/>
+      </geometry>
+      <material name="White"/>
+    </collision>
+    <inertial>
+      <mass value="50"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+
+  <link name="contour_surface_link">
+    <visual>
+      <geometry>
+        <mesh filename="file://$(find iiwa_description)/meshes/surface/visual/contour_surface.stl"/>
+      </geometry>
+      <material name="Black"/>
+    </visual>
+  </link>
+
+
+</robot>

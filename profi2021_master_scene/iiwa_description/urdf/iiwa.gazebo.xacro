@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"
+       xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor">
+
+  <xacro:macro name="iiwa_gazebo" params="robot_name">
+
+     <!-- Enable the Joint Feedback -->
+
+    <gazebo reference="${robot_name}_joint_7">
+      <provideFeedback>true</provideFeedback>
+    </gazebo>
+
+    <!-- The ft_sensor plugin -->
+    <gazebo>
+      <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
+        <updateRate>100.0</updateRate>
+        <topicName>/${robot_name}/state/CartesianWrench</topicName>
+        <jointName>${robot_name}_joint_7</jointName>
+      </plugin>
+    </gazebo>
+
+    <!-- Load Gazebo lib and set the robot namespace -->
+    <gazebo>
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>/${robot_name}</robotNamespace>
+      </plugin>
+    </gazebo>
+
+    <!-- Link0 -->
+    <gazebo reference="${robot_name}_link_0">
+      <material>Gazebo/Grey</material>
+      <mu1>0.4</mu1>
+      <mu2>0.4</mu2>
+    </gazebo>
+
+    <!-- Link1 -->
+    <gazebo reference="${robot_name}_link_1">
+      <material>Gazebo/Orange</material>
+      <mu1>0.4</mu1>
+      <mu2>0.4</mu2>
+    </gazebo>
+
+    <!-- Link2 -->
+    <gazebo reference="${robot_name}_link_2">
+      <material>Gazebo/Orange</material>
+      <mu1>0.4</mu1>
+      <mu2>0.4</mu2>
+    </gazebo>
+
+    <!-- Link3 -->
+    <gazebo reference="${robot_name}_link_3">
+      <material>Gazebo/Orange</material>
+      <mu1>0.4</mu1>
+      <mu2>0.4</mu2>
+    </gazebo>
+
+
+    <!-- Link4 -->
+    <gazebo reference="${robot_name}_link_4">
+      <material>Gazebo/Orange</material>
+      <mu1>0.4</mu1>
+      <mu2>0.4</mu2>
+    </gazebo>
+
+    <!-- Link5 -->
+    <gazebo reference="${robot_name}_link_5">
+      <material>Gazebo/Orange</material>
+      <mu1>0.4</mu1>
+      <mu2>0.4</mu2>
+    </gazebo>
+
+    <!-- Link6 -->
+    <gazebo reference="${robot_name}_link_6">
+      <material>Gazebo/Orange</material>
+      <mu1>0.4</mu1>
+      <mu2>0.4</mu2>
+    </gazebo>
+
+    <!-- Link7 -->
+    <gazebo reference="${robot_name}_link_7">
+      <material>Gazebo/Grey</material>
+      <mu1>0.2</mu1>
+      <mu2>0.2</mu2>
+    </gazebo>
+
+    <gazebo reference="table_link">
+    <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
+    <mu1>0.05</mu1>
+    <mu2>0.05</mu2>
+    </gazebo>
+
+    <gazebo reference="tool_link">
+      <material>Gazebo/Grey</material>
+      <mu1>0.05</mu1>
+      <mu2>0.05</mu2>
+    </gazebo>
+
+    <gazebo reference="tool_link_ee_kuka">
+      <material>Gazebo/Grey</material>
+      <mu1>0.05</mu1>
+      <mu2>0.05</mu2>
+    </gazebo>
+
+    <gazebo reference="surface_link">
+      <material>Gazebo/White</material>
+      <mu1>0.05</mu1>
+      <mu2>0.05</mu2>
+    </gazebo>
+
+    <gazebo reference="contour_surface_link">
+      <material>Gazebo/Black</material>
+    </gazebo>
+
+
+    <gazebo reference="camera_link_optical">
+    <sensor type="camera" name="iiwa_camera_sensor">
+      <update_rate>30.0</update_rate>
+      <camera name="iiwa_camera">
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.02</near>
+          <far>300</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise is sampled independently per pixel on each frame.
+               That pixel's noise value is added to each of its color
+               channels, which at that point lie in the range [0,1]. -->
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>100</updateRate>
+        <cameraName>iiwa/camera1</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>camera_link_optical</frameName>
+        <hackBaseline>0.00</hackBaseline>
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  </xacro:macro>
+
+</robot>
