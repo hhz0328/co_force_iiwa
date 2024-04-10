@@ -11,7 +11,7 @@ rosrun force_control camera.py
 rosrun rqt_gui rqt_gui
 rosrun force_control iiwa_control
 ```
-### 实时监控z轴力矩,第一次打开时，相关配置
+### 实时监控z轴力矩，第一次打开时，相关配置
 ```
 roscore
 rosrun rqt_gui rqt_gui
