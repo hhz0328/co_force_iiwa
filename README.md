@@ -5,6 +5,16 @@
 ```
 wsl -l --all -v     //查看目前的所有子系统
 wsl -d Ubuntu-20.04  //启动（Ubuntu-20.04改为自己对应的系统名字）
+//目录：\\wsl.localhost\Ubuntu-20.04\home\hhz20_04\ucas
+```
+
+## install
+```
+mkdir iiwa_force
+cd iiwa_force
+mkdir src
+cd src
+
 ```
 
 ## 运行
