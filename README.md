@@ -14,6 +14,9 @@ mkdir iiwa_force
 cd iiwa_force
 mkdir src
 cd src
+cd ..
+rosdep install --from-path src --ignore-src -r -y
+catkin build
 
 ```
 
