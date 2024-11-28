@@ -14,6 +14,7 @@ mkdir iiwa_force
 cd iiwa_force
 mkdir src
 cd src
+git clone https://github.com/hhz0328/co_force_iiwa.git
 cd ..
 rosdep install --from-path src --ignore-src -r -y
 catkin build
