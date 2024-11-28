@@ -2,7 +2,9 @@
 测试者：胡翰泽
 
 ## wsl运行
-//代码目录：\\wsl.localhost\Ubuntu-20.04\home\hhz20_04\ucas
+不推荐使用wsl，建议直接部署
+
+代码目录：\\wsl.localhost\Ubuntu-20.04\home\hhz20_04\ucas
 ```
 wsl -l --all -v     //查看目前的所有子系统
 wsl -d Ubuntu-20.04  //启动（Ubuntu-20.04改为自己对应的系统名字）
