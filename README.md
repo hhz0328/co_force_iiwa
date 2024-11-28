@@ -8,7 +8,6 @@
 ```
 wsl -l --all -v     //查看目前的所有子系统
 wsl -d Ubuntu-20.04  //启动（Ubuntu-20.04改为自己对应的系统名字）
-
 ```
 ```
 exit   //退出 WSL
@@ -24,7 +23,6 @@ git clone https://github.com/hhz0328/co_force_iiwa.git
 cd ..
 rosdep install --from-path src --ignore-src -r -y
 catkin build
-
 ```
 
 ## test
