@@ -2,7 +2,7 @@
 <launch>
 
     <!-- ===================================================================================== -->
-    <!-- |    Lauch file to start Gazebo with an IIWA using various controllers.	           | -->
+    <!-- |    Lauch file to start Gazebo with an IIWA using various controllers.	         | -->
 
     <!-- |    It allows to customize the name of the robot, for each robot                   | -->
     <!-- |	  its topics will be under a nameespace with the same name as the robot's.       | -->
