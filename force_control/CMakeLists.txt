@@ -155,6 +155,12 @@ target_link_libraries(iiwa_control
     ${orocos_kdl_LIBRARIES}
 )
 
+add_executable(iiwa_ucas src/iiwa_ucas.cpp)
+target_link_libraries(iiwa_ucas
+    ${catkin_LIBRARIES}
+    ${orocos_kdl_LIBRARIES}
+)
+
 #############
 ## Install ##
 #############

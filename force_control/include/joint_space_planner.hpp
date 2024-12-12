@@ -3,6 +3,9 @@
 #include <ros/ros.h>
 #include <Eigen/Dense>
 
+// LocalTrapecPlanner：用于单个关节的梯形速度规划。
+// TrapezPlanner：用于多个关节的梯形速度规划，利用多个LocalTrapecPlanner实例来管理每个关节的运动。
+
 class LocalTrapecPlanner
 {
 
@@ -13,6 +16,7 @@ public:
         half_T = 0.5*time_step;
         q_dot_max = max_velocity;
         q_ddot_max = max_acceleration;
+        // 在最大加速度下，从零加速到最大速度再减速回零所能覆盖的最小位移。x=1/2 * a * t^2
         q_diff_available = q_dot_max*(q_dot_max/q_ddot_max);
     }
 
