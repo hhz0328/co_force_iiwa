@@ -26,7 +26,7 @@ roscore
 roslaunch profi2021_master_scene start_scene.launch gui:=true
 rosrun force_control camera.py
 rosrun rqt_gui rqt_gui
-rosrun force_control iiwa_control
+rosrun force_control iiwa_ucas
 ```
 ### 实时监控z轴力矩，第一次打开时，相关配置
 ```
