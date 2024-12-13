@@ -2,10 +2,15 @@
 测试者：胡翰泽
 
 ## wsl运行
+不推荐使用wsl，建议直接部署
+
+代码目录：\\wsl.localhost\Ubuntu-20.04\home\hhz20_04\ucas
 ```
 wsl -l --all -v     //查看目前的所有子系统
 wsl -d Ubuntu-20.04  //启动（Ubuntu-20.04改为自己对应的系统名字）
-//目录：\\wsl.localhost\Ubuntu-20.04\home\hhz20_04\ucas
+```
+```
+exit   //退出 WSL
 ```
 
 ## install
@@ -14,7 +19,10 @@ mkdir iiwa_force
 cd iiwa_force
 mkdir src
 cd src
-
+git clone https://github.com/hhz0328/co_force_iiwa.git
+cd ..
+rosdep install --from-path src --ignore-src -r -y
+catkin build
 ```
 
 ## test
@@ -43,3 +51,5 @@ rosrun rqt_gui rqt_gui
 ```
 roslaunch iiwa_description rviz_display_environment.launch
 ```
+# 参考
+https://gitlab.com/beerlab/iprofi2021/profi2021_master_scene
