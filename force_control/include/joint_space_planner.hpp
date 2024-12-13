@@ -41,12 +41,14 @@ public:
         q_dot_actual = 0;
 
         // Calculate velocity and time parameters
+        // 成立，则说明中段可达到最大速度 q_dot_max；否则仅加速到某一较低速度，然后立即减速
         q_dot_const = q_diff > q_diff_available ? q_dot_max : sqrt(q_diff*q_ddot_max);
         t1 = q_dot_const/q_ddot_max;
         t2 = q_diff/q_dot_const;
+        // t3：整体完成时间 = t2 + t1 （加速时间 + 匀速结束时间 = 到达减速开始点）
         t3 = t2 + t1;
 
-        // Add direction
+        // Add direction，用于判断从 q0 到 q1 是正向增加还是反向减少
         direction = ((q_e > q_i) - (q_e < q_i));
         // ROS_INFO_STREAM(direction);
     }
