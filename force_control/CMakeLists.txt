@@ -149,11 +149,6 @@ include_directories(
 #   ${catkin_LIBRARIES}
 # )
 
-add_executable(iiwa_control src/iiwa_control.cpp)
-target_link_libraries(iiwa_control
-    ${catkin_LIBRARIES}
-    ${orocos_kdl_LIBRARIES}
-)
 
 add_executable(iiwa_ucas src/iiwa_ucas.cpp)
 target_link_libraries(iiwa_ucas
@@ -161,11 +156,6 @@ target_link_libraries(iiwa_ucas
     ${orocos_kdl_LIBRARIES}
 )
 
-add_executable(p_to_p_m src/p_to_p_m.cpp)
-target_link_libraries(p_to_p_m
-    ${catkin_LIBRARIES}
-    ${orocos_kdl_LIBRARIES}
-)
 
 add_executable(p_to_p_1 src/p_to_p_1.cpp)
 target_link_libraries(p_to_p_1
@@ -173,11 +163,7 @@ target_link_libraries(p_to_p_1
     ${orocos_kdl_LIBRARIES}
 )
 
-# add_executable(sin src/sin.cpp)
-# target_link_libraries(sin
-#     ${catkin_LIBRARIES}
-#     ${orocos_kdl_LIBRARIES}
-# )
+
 #############
 ## Install ##
 #############

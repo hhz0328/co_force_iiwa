@@ -101,11 +101,10 @@ public:
         // Setup Force control
         // force_pid 用于笛卡尔空间的力控制（6维：3个平移方向+3个旋转方向）
         force_pid.Kp = Eigen::MatrixXd::Identity(6, 6);
-        // force_pid.Kp.diagonal() << 500, 500, 500, 10, 10, 10;
-        force_pid.Kp.diagonal() << 300, 300, 300, 5, 5, 5;
+        force_pid.Kp.diagonal() << 500, 500, 500, 10, 10, 10;
         force_pid.Kd = Eigen::MatrixXd::Identity(n, n);
         // force_pid.Kd.diagonal() << 2, 2, 2, 2, 1, 1, 1;
-        force_pid.Kd.diagonal() << 5, 5, 5, 5, 3, 3, 3;
+        force_pid.Kd.diagonal() << 2, 2, 2, 2, 1, 1, 1;
 
         // Setup trapez planner
         trapez_planner.init(n, M_PI_2, M_PI_4, TIME_STEP);
@@ -128,7 +127,7 @@ public:
         quatd = Eigen::Quaterniond(cos(-M_PI/4), 0, 0, sin(-M_PI/4))*Eigen::Quaterniond(cos(M_PI/2), 0, sin(M_PI/2), 0);
 
         // Desired Force z  (-65 N)
-        Fzd = -55;
+        Fzd = -65;
 
         // Test planner
         Eigen::VectorXd q0 = Eigen::VectorXd::Zero(n);
@@ -216,39 +215,35 @@ public:
 
             // [x y fz roll pitch yaw]
 
-            // Hybrid Posion/Force control (position)
-            // 利用力传感器反馈的末端法向力 Fe[2]（Z方向）来进行Z方向的混合位置/力控制
-            // Fzd 为期望Z方向力
-            // 根据力误差 (Fzd - Fe[2]) 调整期望末端Z位置 z_r，并对误差进行积分保存到 z_I
-            z_I += 0.00002*(Fzd - Fe[2]);
-            // 末端Z位置 z_r ,在Z方向上会根据实际力和期望力进行位置微调
-            z_r = pd.data[2];
-            z_r += 0.0002*(Fzd - Fe[2]) + z_I;
-
-
-            // // 降低积分与比例步长，并加入积分限幅
-            // double force_error_z = (Fzd - Fe[2]);
-            // // 设定积分限幅
-            // double z_I_max = 0.01; 
-            // // 减小积分系数和比例更新量
-            // z_I += 0.000005*force_error_z; 
-            // if (z_I > z_I_max) z_I = z_I_max;
-            // if (z_I < -z_I_max) z_I = -z_I_max;
-
+            // // Hybrid Posion/Force control (position)
+            // // 利用力传感器反馈的末端法向力 Fe[2]（Z方向）来进行Z方向的混合位置/力控制
+            // // Fzd 为期望Z方向力
+            // // 根据力误差 (Fzd - Fe[2]) 调整期望末端Z位置 z_r，并对误差进行积分保存到 z_I
+            // z_I += 0.00002*(Fzd - Fe[2]);
+            // // 末端Z位置 z_r ,在Z方向上会根据实际力和期望力进行位置微调
             // z_r = pd.data[2];
-            // // 适当减小位移增量
-            // z_r += 0.00005*force_error_z + z_I;
+            // z_r += 0.0002*(Fzd - Fe[2]) + z_I;
+
+
+            // 降低积分与比例步长，并加入积分限幅
+            double force_error_z = (Fzd - Fe[2]);
+            // 设定积分限幅
+            double z_I_max = 0.01; 
+            // 减小积分系数和比例更新量
+            z_I += 0.000005*force_error_z; 
+            if (z_I > z_I_max) z_I = z_I_max;
+            if (z_I < -z_I_max) z_I = -z_I_max;
+
+            z_r = pd.data[2];
+            // 适当减小位移增量
+            z_r += 0.00005*force_error_z + z_I;
 
 
             // Orientation
             // 从相机数据计算一个 z_angle，用于调整期望姿态 quatd; 引导末端朝特定方向旋转
             z_angle = 0.005*atan2(camera_point[1], -camera_point[0]);
-
-
             // ROS_INFO_STREAM(z_angle);
             quatd = Eigen::Quaterniond(cos(z_angle/2), 0, 0, sin(z_angle/2))*quatd;
-
-
 
             // 根据 base_point 调整末端期望位置的X/Y坐标，实现对平面位置进行微调
             pd.data[0] += 0.0001*base_point[0];
@@ -270,44 +265,14 @@ public:
             force_pid.e[4] = w_err.y();
             force_pid.e[5] = w_err.z();
 
-
-            // // 在计算最终力矩时增加一点对q_dot的数据滤波或限幅
-            // Eigen::VectorXd q_dot_damped = q_dot.data;
-            // double max_vel = 0.5; // 假设0.5 rad/s
-            // for (int i = 0; i < q_dot_damped.size(); i++) {
-            //     if (q_dot_damped[i] > max_vel) q_dot_damped[i] = max_vel;
-            //     if (q_dot_damped[i] < -max_vel) q_dot_damped[i] = -max_vel;
-            // }
-
-
-            lqr_gain = Eigen::MatrixXd::Zero(n, 2*n);
-            lqr_gain <<
-                  -50,   0,   0,   0,   0,   0,   0,  -10,   0,   0,   0,   0,   0,   0,
-                    0, -60,   0,   0,   0,   0,   0,    0, -12,   0,   0,   0,   0,   0,
-                    0,   0, -45,   0,   0,   0,   0,    0,   0,  -8,   0,   0,   0,   0,
-                    0,   0,   0, -55,   0,   0,   0,    0,   0,   0, -10,   0,   0,   0,
-                    0,   0,   0,   0, -50,   0,   0,    0,   0,   0,   0,  -9,   0,   0,
-                    0,   0,   0,   0,   0, -60,   0,    0,   0,   0,   0,   0, -11,   0,
-                    0,   0,   0,   0,   0,   0, -40,    0,   0,   0,   0,   0,   0,  -7;
-
-            q_err = q.data - qd;         // 关节位置误差
-            q_dot_err = q_dot.data - qd_dot;  // 关节速度误差
-
-            // 状态向量 x = [q_err; q_dot_err]
-            Eigen::VectorXd x(2*n);
-            x << q_err, q_dot_err;
-
-            // 使用LQR控制律 u = -Kx
-            // K为已在构造函数或类中初始化的LQR增益矩阵
-            Eigen::VectorXd u = -lqr_gain * x;
-
-            // 加上重力补偿 G
-            // 原来使用 (J^T Kp e - Kd q_dot + G) 计算扭矩，现在改为 LQR控制 + G
-            // torque = u + G.data;
-
-
+            // S(q) (PD+) + (I - S(q)) (MDC)
+            /*
+            最终通过雅可比转置控制律计算力矩指令：
+            J^T * Kp * e：  通过末端误差计算所需的关节空间力矩
+            - Kd * q_dot:   加入关节速度阻尼项
+            + G：           重力补偿项
+            */
             torque = (J.data.transpose())*force_pid.Kp*force_pid.e - force_pid.Kd*q_dot.data + G.data;
-            
         }
 
         // 将计算得到的各关节力矩值发布到对应的关节力矩控制器话题，以驱动关节执行器
@@ -428,10 +393,6 @@ private:
     // Point from camera and relative base
     Eigen::Vector3d camera_point;
     Eigen::Vector3d base_point;
-
-    Eigen::VectorXd q_err ;       // 关节位置误差
-    Eigen::VectorXd q_dot_err;
-    Eigen::MatrixXd lqr_gain;
 
     // joint positoions control
     PID position_pid;

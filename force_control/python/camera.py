@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 import rospy
 from cv_bridge import CvBridge, CvBridgeError
 
@@ -66,26 +65,8 @@ if __name__ == '__main__':
     processor = image_processor()
     rospy.loginfo("HI")
 
-    # img = cv2.imread('image.png', 1)
-    # print(img.shape)
-    # x0 = img.shape[0]
-    # y0 = img.shape[1]/2
-
-    # edges = cv2.Canny(img[:-100, :], 100, 200)
-    
-    # white_poisnts = np.argwhere(edges == 255)
-    # p = (white_poisnts[-1, 1], white_poisnts[-1, 0])
-    # print(p)
-    # x = [p[1] - x0, -p[0] + y0]
-    # print(x)
-
-    # image = cv2.circle(img, p, radius = 5, color=(255, 0, 0), thickness=-1)
-    # plt.imshow(image)
-    # plt.show()
-
     try:
         rospy.spin()
     except KeyboardInterrupt:
         print("Shutting down")
         
-    # cv2.destroyAllWindows()

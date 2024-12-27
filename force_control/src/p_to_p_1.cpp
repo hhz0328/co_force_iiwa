@@ -93,8 +93,8 @@ public:
         // ----------------------- 梯形速度规划器初始化  -----------------------
         trapez_planner.init(n, M_PI_2, M_PI_4, TIME_STEP);
 
-        // 设置期望位置qd并传给梯形规划器(此处是示例值)
-        qd[0] = 0;      // ...
+        // 设置期望位置qd并传给梯形规划器
+        qd[0] = 0;     
         qd[1] = 0.72;
         qd[2] = 0;
         qd[3] = -1.94;
@@ -107,7 +107,7 @@ public:
         Eigen::VectorXd q0 = Eigen::VectorXd::Zero(n);
         trapez_planner.setup(q0, qd);
 
-        // 机器人初始状态标志位(可根据需求决定是否保留)
+        // 机器人初始状态标志位
         initial_position = false;
 
         // ----------------------- ROS 发布者/订阅者  -----------------------
@@ -160,11 +160,9 @@ public:
                      + position_pid.Kd * (qd_dot - q_dot.data)
                      + G.data;
 
-            // 如果到达期望初始位置的判定条件(可以自行设置阈值)
+            // 如果到达期望初始位置的判定条件
             if ((q_i - q.data).norm() < 5e-2) {
-                // 若需要可在此时将initial_position = true
-                // 以防后续进行其它操作
-                // initial_position = true;
+
             }
         }
 
