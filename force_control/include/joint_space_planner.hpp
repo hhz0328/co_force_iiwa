@@ -2,6 +2,8 @@
 
 #include <ros/ros.h>
 #include <Eigen/Dense>
+#include <cmath>
+#include <vector>
 
 // LocalTrapecPlanner：用于单个关节的梯形速度规划。
 // TrapezPlanner：用于多个关节的梯形速度规划，利用多个LocalTrapecPlanner实例来管理每个关节的运动。
@@ -19,6 +21,7 @@ public:
         // 在最大加速度下，从零加速到最大速度再减速回零所能覆盖的最小位移。x=1/2 * a * t^2
         q_diff_available = q_dot_max*(q_dot_max/q_ddot_max);
     }
+
 
     // q_i -- q initial; q_e -- q end; t_f -- time of end of trajectory
     void setup(double q_i, double q_e)
@@ -139,6 +142,7 @@ public:
         local_planner.resize(n);
         for (size_t i = 0; i < n; ++i)
             local_planner[i].init(max_velocity, max_acceleration, time_step);
+        this->time_step = time_step;
     }
 
     void setup(Eigen::VectorXd & q0, Eigen::VectorXd & q1)
@@ -165,6 +169,15 @@ public:
             q_dot[i] = local_planner[i].get_velocity();
     }
 
+    // bool is_finished() const
+    // {
+    //     for (size_t i = 0; i < n; ++i)
+    //         if (!local_planner[i].is_finished())
+    //             return false;
+    //     return true;
+    // }
+
     std::vector<LocalTrapecPlanner> local_planner;
     size_t n;
+    double time_step;
 };

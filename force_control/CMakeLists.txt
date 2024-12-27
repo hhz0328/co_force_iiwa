@@ -161,11 +161,23 @@ target_link_libraries(iiwa_ucas
     ${orocos_kdl_LIBRARIES}
 )
 
-add_executable(p_to_p src/p_to_p.cpp)
-target_link_libraries(p_to_p
+add_executable(p_to_p_m src/p_to_p_m.cpp)
+target_link_libraries(p_to_p_m
     ${catkin_LIBRARIES}
     ${orocos_kdl_LIBRARIES}
 )
+
+add_executable(p_to_p_1 src/p_to_p_1.cpp)
+target_link_libraries(p_to_p_1
+    ${catkin_LIBRARIES}
+    ${orocos_kdl_LIBRARIES}
+)
+
+# add_executable(sin src/sin.cpp)
+# target_link_libraries(sin
+#     ${catkin_LIBRARIES}
+#     ${orocos_kdl_LIBRARIES}
+# )
 #############
 ## Install ##
 #############
