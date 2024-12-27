@@ -69,7 +69,7 @@ public:
         G.resize(n); 
         M.resize(n);
 
-        // 雅可比矩阵（若仅做位置控制，可不显式使用）
+        // 雅可比矩阵
         J.resize(n);
 
         // 用于前向运动学
