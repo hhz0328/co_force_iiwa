@@ -1,6 +1,8 @@
 # kuka iiwa
 测试者：胡翰泽
 
+请使用：https://github.com/hhz0328/co_force_iiwa/tree/pro
+
 ## wsl运行
 不推荐使用wsl，建议直接部署
 
