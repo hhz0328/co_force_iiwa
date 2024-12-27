@@ -20,7 +20,7 @@
 #include <sensor_msgs/JointState.h>
 
 // Local
-#include "joint_space_planner.hpp"  // 包含TrapezPlanner的头文件
+#include "joint_space_planner.hpp"  
 
 // 控制周期（每5ms一个控制周期）
 #define TIME_STEP 0.005
@@ -72,7 +72,7 @@ public:
         // 雅可比矩阵（若仅做位置控制，可不显式使用）
         J.resize(n);
 
-        // 用于前向运动学(若需检测末端实际位姿可使用 fk_frame)
+        // 用于前向运动学
         fk_frame = KDL::Frame::Identity();
 
         // ----------------------- 关节空间位置PID -----------------------
