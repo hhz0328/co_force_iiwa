@@ -1,6 +1,8 @@
 # kuka iiwa
 测试者：胡翰泽
-![](https://github.com/hhz0328/ros1_exoskeleton_maxon_simulation/blob/noetic/%E4%BB%BF%E7%9C%9F%E6%8E%A7%E5%88%B6%E6%A1%86%E6%9E%B6.jpg)
+
+## 代码框架
+![](https://github.com/hhz0328/co_force_iiwa/blob/pro/1.png)
 
 ## 引言
 **2023-5-14 (master)**：在油管发现了这个宝藏code（原项目是俄文，链接在readme最下面），于是clone了源码仓库进行debug，创建了master分支，并用这个仿真进行了本科毕设力控算法验证。
